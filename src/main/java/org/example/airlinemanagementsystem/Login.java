@@ -50,17 +50,17 @@ public class Login extends JFrame {
     private void initComponents() {
         // Tạo nhãn Username
         lblUsername = new JLabel("Tên đăng nhập");
-        lblUsername.setBounds(20, 20, 120, 25);
+        lblUsername.setBounds(20, 20, 100, 20);
         add(lblUsername);
 
         // Tạo ô nhập liệu Username
         txtUsername = new JTextField();
-        txtUsername.setBounds(100, 20, 250, 25);
+        txtUsername.setBounds(130, 20, 220, 25);
         add(txtUsername);
 
         // Tạo nhãn Password
         lblPassword = new JLabel("Mật khẩu");
-        lblPassword.setBounds(20, 60, 80, 25);
+        lblPassword.setBounds(20, 60, 100, 20);
         add(lblPassword);
 
         // Tạo ô nhập liệu Password (ẩn ký tự nhập)
@@ -69,18 +69,18 @@ public class Login extends JFrame {
         add(txtPassword);
 
         // Tạo nút Reset
-        btnReset = new JButton("Đặt lại");
-        btnReset.setBounds(20, 110, 80, 30);
+        btnReset = new JButton("Xóa");
+        btnReset.setBounds(20, 110, 100, 30);
         add(btnReset);
 
         // Tạo nút Submit
         btnSubmit = new JButton("Đăng nhập");
-        btnSubmit.setBounds(120, 110, 80, 30);
+        btnSubmit.setBounds(130, 110, 100, 30);
         add(btnSubmit);
 
         // Tạo nút Close
         btnClose = new JButton("Đóng");
-        btnClose.setBounds(220, 110, 80, 30);
+        btnClose.setBounds(240, 110, 100, 30);
         add(btnClose);
     }
 
