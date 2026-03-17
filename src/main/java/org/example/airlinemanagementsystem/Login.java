@@ -1,6 +1,8 @@
 package org.example.airlinemanagementsystem;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -8,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login extends JFrame {
+public class Login extends JFrame implements ActionListener {
 
     // Các thành phần giao diện
     private JLabel lblUsername;
@@ -71,16 +73,19 @@ public class Login extends JFrame {
         // Tạo nút Reset
         btnReset = new JButton("Xóa");
         btnReset.setBounds(20, 110, 100, 30);
+        btnReset.addActionListener(this);
         add(btnReset);
 
         // Tạo nút Submit
         btnSubmit = new JButton("Đăng nhập");
         btnSubmit.setBounds(130, 110, 100, 30);
+        btnSubmit.addActionListener(this);
         add(btnSubmit);
 
         // Tạo nút Close
         btnClose = new JButton("Đóng");
         btnClose.setBounds(240, 110, 100, 30);
+        btnClose.addActionListener(this);
         add(btnClose);
     }
 
@@ -88,5 +93,23 @@ public class Login extends JFrame {
     public static void main(String[] args) {
         // Tạo đối tượng ẩn danh để khởi tạo cửa sổ đăng nhập
         new Login();
+    }
+
+    // Ghi đè phương thức actionPerformed để xử lý sự kiện
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Kiểm tra xem nút nào đã được nhấn
+        if (e.getSource() == btnClose) {
+            // Nút Close: Đóng cửa sổ đăng nhập
+            setVisible(false);
+        } else if (e.getSource() == btnReset) {
+            // Nút Reset: Xóa trắng dữ liệu trong các ô nhập liệu
+            txtUsername.setText("");
+            txtPassword.setText("");
+        } else if (e.getSource() == btnSubmit) {
+            // Nút Submit: Thiết lập kết nối cơ sở dữ liệu (JDBC)
+            // TODO: Triển khai kết nối CSDL trong các bước tiếp theo
+            System.out.println("Nút Submit đã được nhấn - Chuẩn bị kết nối JDBC");
+        }
     }
 }
