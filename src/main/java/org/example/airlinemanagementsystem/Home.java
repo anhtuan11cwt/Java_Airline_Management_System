@@ -1,5 +1,7 @@
 package org.example.airlinemanagementsystem;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -51,6 +53,23 @@ public class Home extends JFrame implements ActionListener {
 
         // Thêm hình ảnh nền vào khung hình
         add(l1);
+
+        // Thiết lập Tiêu đề Chào mừng
+        // Tạo nhãn tiêu đề với nội dung chào mừng
+        JLabel heading = new JLabel("Hệ thống Quản lý Hàng không Chào mừng Bạn");
+
+        // Định vị và thiết lập kích thước cho tiêu đề
+        heading.setBounds(500, 40, 1000, 40);
+
+        // Thay đổi màu chữ sang màu xanh dương
+        heading.setForeground(Color.BLUE);
+
+        // Thiết lập font chữ: Tahoma, kiểu chữ thường (PLAIN), kích thước 36
+        heading.setFont(new Font("Inter", Font.PLAIN, 36));
+
+        // Thêm tiêu đề vào nhãn hình ảnh nền (không thêm trực tiếp vào frame)
+        // để hiển thị đè lên hình ảnh
+        l1.add(heading);
 
         // TODO: Thêm thanh menu (JMenuBar) với các mục: Quản lý chuyến bay, Quản lý
         // khách hàng, Báo cáo, Thoát
