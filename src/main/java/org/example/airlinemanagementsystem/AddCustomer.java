@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.*;
 
 public class AddCustomer extends JFrame implements ActionListener {
 
@@ -150,6 +151,28 @@ public class AddCustomer extends JFrame implements ActionListener {
 
             // Dữ liệu đã sẵn sàng để đưa vào câu lệnh SQL
             // Ví dụ: INSERT INTO customer VALUES (..., ..., ...)
+
+            try {
+                // Khởi tạo đối tượng kết nối database
+                Conn conn = new Conn();
+
+                // Xây dựng câu lệnh INSERT INTO passenger
+                String query = "INSERT INTO passenger VALUES ('" + name + "', '" + nationality + "', '" + phone + "', '"
+                        + address + "', '" + aadhar + "', '" + gender + "')";
+
+                // Thực thi câu lệnh INSERT (DML - sử dụng executeUpdate)
+                conn.s.executeUpdate(query);
+
+                // Hiển thị thông báo thành công
+                JOptionPane.showMessageDialog(null, "Thêm thông tin khách hàng thành công");
+
+                // Đóng cửa sổ sau khi lưu thành công
+                setVisible(false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi lưu dữ liệu: " + e.getMessage());
+            }
         }
     }
 
