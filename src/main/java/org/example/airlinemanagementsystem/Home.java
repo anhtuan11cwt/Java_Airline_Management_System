@@ -1,12 +1,9 @@
 package org.example.airlinemanagementsystem;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class Home extends JFrame implements ActionListener {
 
@@ -18,14 +15,14 @@ public class Home extends JFrame implements ActionListener {
         // Thiết lập chế độ toàn màn hình
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        // Thiết lập vị trí mặc định bắt đầu từ tọa độ (0,0)
+        setLocation(0, 0);
+
         // Thiết lập hành động khi đóng cửa sổ
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Vô hiệu hóa bố cục mặc định để tự do đặt thành phần theo tọa độ
         setLayout(null);
-
-        // Đặt màu nền trắng
-        getContentPane().setBackground(Color.WHITE);
 
         // Khởi tạo các thành phần giao diện
         initComponents();
