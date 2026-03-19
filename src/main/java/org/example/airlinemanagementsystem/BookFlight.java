@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.*;
+import java.util.*;
+import com.toedter.calendar.JDateChooser;
 
 public class BookFlight extends JFrame implements ActionListener {
 
@@ -19,11 +21,21 @@ public class BookFlight extends JFrame implements ActionListener {
     JLabel lblFlightNameValue, lblFlightCodeValue;
     JLabel lblFlightNotFound;
 
+    // Biến cho JDateChooser và nút đặt vé
+    JDateChooser dateChooser;
+    JButton btnBookFlight;
+
     public BookFlight() {
         // Thiết lập khung hình (Frame)
         setTitle("Đặt vé máy bay");
-        setSize(900, 650); // Tăng chiều cao để chứa các thành phần mới
-        setLocation(300, 500);
+        setSize(1100, 700); // Mở rộng kích thước frame
+
+        // Đặt frame ở trung tâm màn hình
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = (int) screenSize.getWidth();
+        int screenHeight = (int) screenSize.getHeight();
+        setLocation((screenWidth - 1100) / 2, (screenHeight - 700) / 2);
+
         getContentPane().setBackground(Color.white);
         setLayout(null);
 
@@ -194,14 +206,47 @@ public class BookFlight extends JFrame implements ActionListener {
         add(lblFlightNotFound);
 
         // =====================================================
+        // PHẦN CHỌN NGÀY KHỞI HÀNH (Date of Travel - JCalendar)
+        // =====================================================
+
+        // Nhãn Date of Travel
+        JLabel lblDateOfTravel = new JLabel("Ngày khởi hành:");
+        lblDateOfTravel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblDateOfTravel.setBounds(60, 580, 150, 25);
+        add(lblDateOfTravel);
+
+        // JDateChooser để chọn ngày
+        dateChooser = new JDateChooser();
+        dateChooser.setBounds(220, 580, 200, 25);
+        dateChooser.setDateFormatString("yyyy-MM-dd");
+        add(dateChooser);
+
+        // =====================================================
+        // NÚT ĐẶT VÉ (Book Flight Button)
+        // =====================================================
+
+        // Nút Book Flight
+        btnBookFlight = new JButton("Đặt vé");
+        btnBookFlight.setBackground(Color.black);
+        btnBookFlight.setForeground(Color.white);
+        btnBookFlight.setFont(new Font("Tahoma", Font.BOLD, 16));
+        btnBookFlight.setBounds(450, 575, 150, 35);
+        btnBookFlight.addActionListener(this);
+        add(btnBookFlight);
+
+        // =====================================================
         // ĐỔ DỮ LIỆU VÀO DROPDOWN TỪ CƠ SỞ DỮ LIỆU
         // =====================================================
         loadFlightData();
 
         // Hình ảnh minh họa (ImageIcon)
-        ImageIcon imgIcon = new ImageIcon("src/main/resources/icons/emp.png");
-        JLabel lblImage = new JLabel(imgIcon);
-        lblImage.setBounds(550, 80, 280, 400);
+        ImageIcon imgIcon = new ImageIcon("src/main/resources/icons/details.jpg");
+        // Thu nhỏ hình ảnh xuống kích thước phù hợp
+        Image img = imgIcon.getImage();
+        Image scaledImg = img.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImg);
+        JLabel lblImage = new JLabel(scaledIcon);
+        lblImage.setBounds(600, 80, 450, 300);
         add(lblImage);
 
         // Hiển thị cửa sổ
@@ -302,6 +347,50 @@ public class BookFlight extends JFrame implements ActionListener {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Lỗi khi truy vấn chuyến bay: " + e.getMessage());
             }
+        } else if (ae.getSource() == btnBookFlight) {
+            // Xử lý đặt vé máy bay
+
+            // Kiểm tra thông tin khách hàng
+            String aadhar = txtAadhar.getText();
+            if (aadhar.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập số CMND/CCCD và tìm kiếm thông tin khách hàng");
+                return;
+            }
+
+            // Kiểm tra thông tin chuyến bay
+            if (lblFlightCodeValue.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn chuyến bay");
+                return;
+            }
+
+            // Kiểm tra ngày khởi hành
+            if (dateChooser.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn ngày khởi hành");
+                return;
+            }
+
+            // Kiểm tra ngày khởi hành phải lớn hơn ngày hiện tại
+            java.util.Date selectedDate = dateChooser.getDate();
+            java.util.Date today = new java.util.Date();
+            today.setHours(0);
+            today.setMinutes(0);
+            today.setSeconds(0);
+
+            if (selectedDate.before(today) || selectedDate.equals(today)) {
+                JOptionPane.showMessageDialog(null, "Ngày khởi hành phải lớn hơn ngày hiện tại");
+                return;
+            }
+
+            // Lấy thông tin
+            String flightCode = lblFlightCodeValue.getText();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            String travelDate = sdf.format(selectedDate);
+
+            // Hiển thị thông báo đặt vé thành công (logic lưu database sẽ được thêm sau)
+            JOptionPane.showMessageDialog(null,
+                    "Đặt vé thành công!\n" +
+                            "Mã chuyến bay: " + flightCode + "\n" +
+                            "Ngày khởi hành: " + travelDate);
         }
     }
 
