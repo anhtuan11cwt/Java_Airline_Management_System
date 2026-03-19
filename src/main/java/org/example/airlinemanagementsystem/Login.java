@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 
 public class Login extends JFrame implements ActionListener {
 
@@ -20,14 +21,15 @@ public class Login extends JFrame implements ActionListener {
     private JButton btnReset;
     private JButton btnSubmit;
     private JButton btnClose;
+    private JToggleButton btnShowPassword;
 
     // Hàm khởi tạo (Constructor)
     public Login() {
         // Thiết lập tiêu đề cửa sổ
         setTitle("Đăng nhập hệ thống");
 
-        // Thiết lập kích thước cửa sổ: 400 chiều dài, 250 chiều cao
-        setSize(400, 250);
+        // Thiết lập kích thước cửa sổ: 400 chiều dài, 300 chiều cao
+        setSize(400, 300);
 
         // Thiết lập vị trí xuất hiện: cách lề trái 600px, cách lề trên 250px
         setLocation(600, 250);
@@ -67,24 +69,30 @@ public class Login extends JFrame implements ActionListener {
 
         // Tạo ô nhập liệu Password (ẩn ký tự nhập)
         txtPassword = new JPasswordField();
-        txtPassword.setBounds(100, 60, 250, 25);
+        txtPassword.setBounds(100, 60, 180, 25);
         add(txtPassword);
+
+        // Tạo nút hiển thị/ẩn mật khẩu
+        btnShowPassword = new JToggleButton("👁");
+        btnShowPassword.setBounds(285, 60, 35, 25);
+        btnShowPassword.addActionListener(this);
+        add(btnShowPassword);
 
         // Tạo nút Reset
         btnReset = new JButton("Xóa");
-        btnReset.setBounds(20, 110, 100, 30);
+        btnReset.setBounds(20, 120, 100, 30);
         btnReset.addActionListener(this);
         add(btnReset);
 
         // Tạo nút Submit
         btnSubmit = new JButton("Đăng nhập");
-        btnSubmit.setBounds(130, 110, 100, 30);
+        btnSubmit.setBounds(130, 120, 100, 30);
         btnSubmit.addActionListener(this);
         add(btnSubmit);
 
         // Tạo nút Close
         btnClose = new JButton("Đóng");
-        btnClose.setBounds(240, 110, 100, 30);
+        btnClose.setBounds(240, 120, 100, 30);
         btnClose.addActionListener(this);
         add(btnClose);
     }
@@ -110,6 +118,15 @@ public class Login extends JFrame implements ActionListener {
             // Nút Submit: Thiết lập kết nối cơ sở dữ liệu (JDBC)
             // TODO: Triển khai kết nối CSDL trong các bước tiếp theo
             System.out.println("Nút Submit đã được nhấn - Chuẩn bị kết nối JDBC");
+        } else if (e.getSource() == btnShowPassword) {
+            // Nút hiển thị/ẩn mật khẩu
+            if (btnShowPassword.isSelected()) {
+                // Hiển thị mật khẩu dạng văn bản
+                txtPassword.setEchoChar((char) 0);
+            } else {
+                // Ẩn mật khẩu bằng dấu chấm
+                txtPassword.setEchoChar('•');
+            }
         }
     }
 }
