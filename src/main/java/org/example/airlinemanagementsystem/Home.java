@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 public class Home extends JFrame implements ActionListener {
 
@@ -71,8 +74,47 @@ public class Home extends JFrame implements ActionListener {
         // để hiển thị đè lên hình ảnh
         l1.add(heading);
 
-        // TODO: Thêm thanh menu (JMenuBar) với các mục: Quản lý chuyến bay, Quản lý
-        // khách hàng, Báo cáo, Thoát
+        // ========================================
+        // Xây dựng Thanh Menu (Menu Bar)
+        // ========================================
+
+        // Khởi tạo thanh menu chính (JMenuBar)
+        JMenuBar menuBar = new JMenuBar();
+
+        // Tạo Menu "Details"
+        JMenu details = new JMenu("Chi tiết");
+
+        // Tạo các Menu Item cho menu "Details"
+        JMenuItem flightDetails = new JMenuItem("Chi tiết chuyến bay");
+        JMenuItem customerDetails = new JMenuItem("Thông tin khách hàng");
+        JMenuItem reservationDetails = new JMenuItem("Chi tiết đặt chỗ");
+        JMenuItem bookFlight = new JMenuItem("Đặt chuyến bay");
+        JMenuItem journeyDetails = new JMenuItem("Chi tiết hành trình");
+        JMenuItem ticketCancellation = new JMenuItem("Hủy vé");
+
+        // Thêm các Menu Item vào menu "Details"
+        details.add(flightDetails);
+        details.add(customerDetails);
+        details.add(reservationDetails);
+        details.add(bookFlight);
+        details.add(journeyDetails);
+        details.add(ticketCancellation);
+
+        // Tạo Menu "Ticket"
+        JMenu ticket = new JMenu("Vé máy bay");
+
+        // Tạo Menu Item "Boarding Pass" cho menu "Ticket"
+        JMenuItem boardingPass = new JMenuItem("Thẻ lên máy bay");
+
+        // Thêm "Boarding Pass" vào menu "Ticket" (KHÔNG phải vào menu "Details")
+        ticket.add(boardingPass);
+
+        // Thêm các menu vào thanh menu chính
+        menuBar.add(details);
+        menuBar.add(ticket);
+
+        // Thiết lập thanh menu cho khung hình bằng hàm setJMenuBar
+        setJMenuBar(menuBar);
     }
 
     // Hàm main - điểm bắt đầu của chương trình
