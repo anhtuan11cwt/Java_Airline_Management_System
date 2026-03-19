@@ -1,11 +1,23 @@
 package org.example.airlinemanagementsystem;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.Choice;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.sql.*;
-import java.util.*;
+import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.util.Random;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 import com.toedter.calendar.JDateChooser;
 
 public class BookFlight extends JFrame implements ActionListener {
@@ -381,16 +393,101 @@ public class BookFlight extends JFrame implements ActionListener {
                 return;
             }
 
-            // Lấy thông tin
+            // =====================================================
+            // BƯỚC 1: THU THẬP DỮ LIỆU TỪ GIAO DIỆN
+            // =====================================================
+
+            // Lấy thông tin từ các trường
+            String aadhaarNo = txtAadhar.getText();
+            String name = lblNameValue.getText();
+            String nationality = lblNationalityValue.getText();
             String flightCode = lblFlightCodeValue.getText();
+            String flightName = lblFlightNameValue.getText();
+            String source = choiceSource.getSelectedItem();
+            String destination = choiceDestination.getSelectedItem();
+
+            // Xử lý ngày tháng từ JDateChooser
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
             String travelDate = sdf.format(selectedDate);
 
-            // Hiển thị thông báo đặt vé thành công (logic lưu database sẽ được thêm sau)
-            JOptionPane.showMessageDialog(null,
-                    "Đặt vé thành công!\n" +
-                            "Mã chuyến bay: " + flightCode + "\n" +
-                            "Ngày khởi hành: " + travelDate);
+            // =====================================================
+            // BƯỚC 2: TẠO MÃ ĐỊNH DANH NGẪU NHIÊN
+            // =====================================================
+
+            Random random = new Random();
+
+            // Tạo mã PNR (6 chữ số)
+            int pnrNumber = 100000 + random.nextInt(900000); // 100000 - 999999
+            String pnr = String.valueOf(pnrNumber);
+
+            // Tạo mã vé Ticket ID (4 chữ số)
+            int ticketIdNumber = 1000 + random.nextInt(9000); // 1000 - 9999
+            String ticketId = String.valueOf(ticketIdNumber);
+
+            // =====================================================
+            // BƯỚC 3: TẠO BẢNG RESERVATION TRONG MYSQL
+            // =====================================================
+
+            try {
+                Conn conn = new Conn();
+
+                // Tạo bảng reservation nếu chưa tồn tại
+                String createTableQuery = "CREATE TABLE IF NOT EXISTS reservation (" +
+                        "PNR VARCHAR(10) PRIMARY KEY, " +
+                        "Ticket VARCHAR(10), " +
+                        "Aadhaar VARCHAR(20), " +
+                        "Name VARCHAR(50), " +
+                        "Nationality VARCHAR(30), " +
+                        "Flight_Name VARCHAR(100), " +
+                        "Flight_Code VARCHAR(20), " +
+                        "Source VARCHAR(50), " +
+                        "Destination VARCHAR(50), " +
+                        "D_Date VARCHAR(20)" +
+                        ")";
+                conn.s.executeUpdate(createTableQuery);
+
+                // =====================================================
+                // BƯỚC 4: LƯU DỮ LIỆU VÀO CƠ SỞ DỮ LIỆU
+                // =====================================================
+
+                // Chèn dữ liệu vào bảng reservation
+                String insertQuery = "INSERT INTO reservation VALUES ('" +
+                        pnr + "', '" +
+                        ticketId + "', '" +
+                        aadhaarNo + "', '" +
+                        name + "', '" +
+                        nationality + "', '" +
+                        flightName + "', '" +
+                        flightCode + "', '" +
+                        source + "', '" +
+                        destination + "', '" +
+                        travelDate + "')";
+
+                conn.s.executeUpdate(insertQuery);
+
+                // =====================================================
+                // BƯỚC 5: HIỂN THỊ THÔNG BÁO THÀNH CÔNG
+                // =====================================================
+
+                JOptionPane.showMessageDialog(null,
+                        "Đặt vé thành công!\n\n" +
+                                "PNR: " + pnr + "\n" +
+                                "Ticket ID: " + ticketId + "\n" +
+                                "Họ tên: " + name + "\n" +
+                                "Chuyến bay: " + flightName + "\n" +
+                                "Mã chuyến bay: " + flightCode + "\n" +
+                                "Từ: " + source + " → Đến: " + destination + "\n" +
+                                "Ngày khởi hành: " + travelDate,
+                        "Đặt vé thành công",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                // Đóng cửa sổ đặt vé
+                setVisible(false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi lưu đặt vé: " + e.getMessage());
+            }
         }
     }
 

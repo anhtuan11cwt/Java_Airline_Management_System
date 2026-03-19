@@ -48,3 +48,21 @@ INSERT INTO flight VALUES
 ('VN103', 'Đà Nẵng', 'Nha Trang', '14:00', '15:30', '1h 30p', '900000'),
 ('VN104', 'Nha Trang', 'Hà Nội', '16:00', '19:00', '3h 00p', '1800000'),
 ('VN105', 'Hà Nội', 'Phú Quốc', '20:00', '22:30', '2h 30p', '1600000');
+
+CREATE TABLE reservation (
+    PNR VARCHAR(20) PRIMARY KEY,
+    Ticket VARCHAR(20),
+    Aadhaar VARCHAR(20),
+    Name VARCHAR(50),
+    Nationality VARCHAR(20),
+    Flight_Name VARCHAR(50),
+    Flight_Code VARCHAR(20),
+    Source VARCHAR(40),
+    Destination VARCHAR(40),
+    D_Date DATE
+);
+
+INSERT INTO reservation VALUES
+('PNR001', 'TICK001', 'VN001', 'Nguyen Van A', 'Vietnam', 'Air India 1212', 'VN101', 'Hà Nội', 'TP. Hồ Chí Minh', '2026-03-20'),
+('PNR002', 'TICK002', 'VN002', 'Tran Thi B', 'Vietnam', 'IndiGo 2201', 'VN102', 'TP. Hồ Chí Minh', 'Đà Nẵng', '2026-03-21');
+
