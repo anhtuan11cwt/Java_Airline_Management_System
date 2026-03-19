@@ -1,7 +1,12 @@
 package org.example.airlinemanagementsystem;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 
 public class FlightInfo extends JFrame {
 
@@ -21,29 +26,48 @@ public class FlightInfo extends JFrame {
         // Thiết lập layout null để có thể sử dụng setBounds
         setLayout(null);
 
-        // Tạo tiêu đề cột cho bảng
-        String[] columnNames = { "Mã chuyến bay", "Từ", "Đến", "Giờ khởi hành", "Giờ đến", "Thời gian bay", "Giá vé" };
+        // Tạo JTable để hiển thị dữ liệu
+        JTable table = new JTable();
 
-        // Tạo dữ liệu mẫu cho bảng (có thể thay đổi sau)
-        String[][] data = {
-                { "VN101", "Hà Nội", "TP. Hồ Chí Minh", "08:00", "10:30", "2h 30p", "1.500.000" },
-                { "VN102", "TP. Hồ Chí Minh", "Đà Nẵng", "11:00", "13:00", "2h 00p", "1.200.000" },
-                { "VN103", "Đà Nẵng", "Nha Trang", "14:00", "15:30", "1h 30p", "900.000" },
-                { "VN104", "Nha Trang", "Hà Nội", "16:00", "19:00", "3h 00p", "1.800.000" },
-                { "VN105", "Hà Nội", "Phú Quốc", "20:00", "22:30", "2h 30p", "1.600.000" }
-        };
+        // Xử lý ngoại lệ và truy vấn dữ liệu từ database
+        try {
+            // Bước 1: Tạo kết nối đến database
+            Conn conn = new Conn();
+            Connection c = conn.c;
+            Statement s = conn.s;
 
-        // Tạo JTable với dữ liệu và tiêu đề cột
-        JTable table = new JTable(data, columnNames);
+            // Bước 2: Thực thi truy vấn SQL SELECT * FROM flight
+            // Sử dụng executeQuery() để lấy dữ liệu từ bảng flight
+            // Đối tượng ResultSet lưu trữ kết quả trả về từ câu lệnh SQL
+            ResultSet rs = s.executeQuery("SELECT * FROM flight");
+
+            // Bước 3: Chuyển đổi ResultSet sang TableModel (thay thế cho rs2xml.jar)
+            // Sử dụng hàm DbUtils.resultSetToTableModel(rs) để tự động chuyển đổi
+            // Trong trường hợp không có rs2xml.jar, sử dụng phương pháp thủ công:
+            table.setModel(resultSetToTableModel(rs));
+
+            System.out.println("Truy vấn dữ liệu thành công!");
+
+        } catch (Exception e) {
+            // Xử lý ngoại lệ khi truy vấn thất bại
+            // Sử dụng khối try-catch để quản lý các lỗi liên quan đến cơ sở dữ liệu
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Lỗi truy vấn dữ liệu: " + e.getMessage(),
+                    "Lỗi Database",
+                    JOptionPane.ERROR_MESSAGE);
+        }
 
         // Thiết lập vị trí và kích thước cho bảng
+        // Sử dụng setBounds để xác định vị trí và kích thước của bảng
         table.setBounds(0, 0, 800, 500);
 
         // Tạo JScrollPane để thêm thanh cuộn khi dữ liệu quá lớn
+        // Giải quyết vấn đề scroll bar khi dữ liệu nhiều hoặc cửa sổ bị thu nhỏ
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(0, 0, 800, 500);
 
-        // Thêm bảng vào frame
+        // Thêm scrollPane (chứa bảng) vào frame
         add(scrollPane);
 
         // Cho phép hiển thị frame
@@ -51,6 +75,42 @@ public class FlightInfo extends JFrame {
 
         // Thiết lập hoạt động đóng cửa sổ
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    /**
+     * Hàm chuyển đổi ResultSet sang DefaultTableModel
+     * Tương tự như DbUtils.resultSetToTableModel(rs)
+     * Thay thế cho thư viện rs2xml.jar
+     * 
+     * @param rs ResultSet chứa dữ liệu từ database
+     * @return DefaultTableModel để hiển thị trong JTable
+     */
+    private DefaultTableModel resultSetToTableModel(ResultSet rs) throws Exception {
+        // Tạo đối tượng ResultSetMetaData để lấy thông tin cột
+        ResultSetMetaData metaData = rs.getMetaData();
+
+        // Lấy số lượng cột
+        int columnCount = metaData.getColumnCount();
+
+        // Tạo mảng tên cột
+        String[] columnNames = new String[columnCount];
+        for (int i = 0; i < columnCount; i++) {
+            columnNames[i] = metaData.getColumnLabel(i + 1);
+        }
+
+        // Tạo DefaultTableModel với tên cột
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+
+        // Duyệt qua từng hàng trong ResultSet và thêm vào TableModel
+        while (rs.next()) {
+            Object[] row = new Object[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = rs.getObject(i + 1);
+            }
+            tableModel.addRow(row);
+        }
+
+        return tableModel;
     }
 
     public static void main(String[] args) {

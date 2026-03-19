@@ -29,3 +29,22 @@ INSERT INTO flight VALUES
 ('1003', 'SpiceJet 1112', 'Mumbai', 'Chennai'),
 ('1004', 'Vistara 3222', 'Delhi', 'Amritsar'),
 ('1005', 'Air India 4500', 'Delhi', 'Ayodhya');
+
+DROP TABLE IF EXISTS flight;
+
+CREATE TABLE flight (
+    f_code VARCHAR(20) PRIMARY KEY,
+    source VARCHAR(40),
+    destination VARCHAR(40),
+    departure VARCHAR(10),
+    arrival VARCHAR(10),
+    duration VARCHAR(20),
+    price VARCHAR(20)
+);
+
+INSERT INTO flight VALUES
+('VN101', 'Hà Nội', 'TP. Hồ Chí Minh', '08:00', '10:30', '2h 30p', '1500000'),
+('VN102', 'TP. Hồ Chí Minh', 'Đà Nẵng', '11:00', '13:00', '2h 00p', '1200000'),
+('VN103', 'Đà Nẵng', 'Nha Trang', '14:00', '15:30', '1h 30p', '900000'),
+('VN104', 'Nha Trang', 'Hà Nội', '16:00', '19:00', '3h 00p', '1800000'),
+('VN105', 'Hà Nội', 'Phú Quốc', '20:00', '22:30', '2h 30p', '1600000');
