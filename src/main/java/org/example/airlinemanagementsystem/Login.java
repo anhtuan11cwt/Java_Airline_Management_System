@@ -148,8 +148,8 @@ public class Login extends JFrame implements ActionListener {
                     // Đóng cửa sổ đăng nhập
                     setVisible(false);
 
-                    // TODO: Chuyển sang khung hình tiếp theo (Main Frame)
-                    System.out.println("Chuyển sang giao diện chính...");
+                    // Mở trang chủ
+                    new Home();
                 } else {
                     // Không tìm thấy tài khoản - đăng nhập không hợp lệ
                     System.out.println("Invalid Username or Password");
