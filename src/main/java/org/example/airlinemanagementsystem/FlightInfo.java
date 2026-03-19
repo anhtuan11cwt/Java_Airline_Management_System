@@ -74,7 +74,8 @@ public class FlightInfo extends JFrame {
         setVisible(true);
 
         // Thiết lập hoạt động đóng cửa sổ
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Sử dụng DISPOSE_ON_CLOSE để chỉ đóng cửa sổ này, không đóng toàn bộ ứng dụng
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**

@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class Home extends JFrame implements ActionListener {
 
@@ -100,6 +101,22 @@ public class Home extends JFrame implements ActionListener {
         details.add(journeyDetails);
         details.add(ticketCancellation);
 
+        // ========================================
+        // THÊM ACTION LISTENER CHO CÁC MENU ITEMS
+        // ========================================
+
+        // Thêm ActionListener cho "Chi tiết chuyến bay"
+        flightDetails.addActionListener(this);
+
+        // Thêm ActionListener cho "Thông tin khách hàng"
+        customerDetails.addActionListener(this);
+
+        // Thêm ActionListener cho các menu items khác (nếu cần)
+        reservationDetails.addActionListener(this);
+        bookFlight.addActionListener(this);
+        journeyDetails.addActionListener(this);
+        ticketCancellation.addActionListener(this);
+
         // Tạo Menu "Ticket"
         JMenu ticket = new JMenu("Vé máy bay");
 
@@ -108,6 +125,9 @@ public class Home extends JFrame implements ActionListener {
 
         // Thêm "Boarding Pass" vào menu "Ticket" (KHÔNG phải vào menu "Details")
         ticket.add(boardingPass);
+
+        // Thêm ActionListener cho "Thẻ lên máy bay"
+        boardingPass.addActionListener(this);
 
         // Thêm các menu vào thanh menu chính
         menuBar.add(details);
@@ -126,7 +146,58 @@ public class Home extends JFrame implements ActionListener {
     // Ghi đè phương thức actionPerformed để xử lý sự kiện
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Xử lý sự kiện cho trang chủ sẽ được thêm sau
-        // Các sự kiện menu và nút bấm sẽ được thiết lập ở đây
+        // Lấy lệnh action từ sự kiện
+        String actionCommand = e.getActionCommand();
+
+        System.out.println("Menu được chọn: " + actionCommand);
+
+        // Xử lý điều kiện: Kiểm tra mục nào được người dùng nhấp
+        // Sử dụng getActionCommand() để so sánh
+
+        if (actionCommand.equals("Chi tiết chuyến bay")) {
+            // Kích hoạt Frame: Khi người dùng chọn "Flight Details",
+            // một đối tượng của lớp FlightInfo sẽ được khởi tạo
+            // để mở cửa sổ thông tin chuyến bay
+            new FlightInfo();
+
+        } else if (actionCommand.equals("Thông tin khách hàng")) {
+            // Kích hoạt cửa sổ thêm thông tin khách hàng
+            new AddCustomer();
+
+        } else if (actionCommand.equals("Chi tiết đặt chỗ")) {
+            // Chức năng đang được phát triển
+            JOptionPane.showMessageDialog(this,
+                    "Chức năng Chi tiết đặt chỗ đang được phát triển!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } else if (actionCommand.equals("Đặt chuyến bay")) {
+            // Chức năng đang được phát triển
+            JOptionPane.showMessageDialog(this,
+                    "Chức năng Đặt chuyến bay đang được phát triển!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } else if (actionCommand.equals("Chi tiết hành trình")) {
+            // Chức năng đang được phát triển
+            JOptionPane.showMessageDialog(this,
+                    "Chức năng Chi tiết hành trình đang được phát triển!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } else if (actionCommand.equals("Hủy vé")) {
+            // Chức năng đang được phát triển
+            JOptionPane.showMessageDialog(this,
+                    "Chức năng Hủy vé đang được phát triển!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } else if (actionCommand.equals("Thẻ lên máy bay")) {
+            // Chức năng đang được phát triển
+            JOptionPane.showMessageDialog(this,
+                    "Chức năng Thẻ lên máy bay đang được phát triển!",
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
