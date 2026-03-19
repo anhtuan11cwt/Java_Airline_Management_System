@@ -3,10 +3,12 @@ package org.example.airlinemanagementsystem;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -115,9 +117,51 @@ public class Login extends JFrame implements ActionListener {
             txtUsername.setText("");
             txtPassword.setText("");
         } else if (e.getSource() == btnSubmit) {
-            // Nút Submit: Thiết lập kết nối cơ sở dữ liệu (JDBC)
-            // TODO: Triển khai kết nối CSDL trong các bước tiếp theo
-            System.out.println("Nút Submit đã được nhấn - Chuẩn bị kết nối JDBC");
+            // Nút Submit: Xử lý đăng nhập
+            try {
+                // Bước 1: Lấy dữ liệu từ giao diện
+                String user = txtUsername.getText();
+                String pass = txtPassword.getText();
+
+                // Kiểm tra nếu người dùng chưa nhập thông tin
+                if (user.isEmpty() || pass.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng nhập tên đăng nhập và mật khẩu!", "Thông báo",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                // Bước 2: Tạo kết nối CSDL
+                Conn c = new Conn();
+
+                // Bước 3: Xây dựng truy vấn SQL
+                String query = "select * from login where username = '" + user + "' and password = '" + pass + "'";
+
+                // Bước 4: Thực thi truy vấn và xử lý kết quả
+                ResultSet rs = c.s.executeQuery(query);
+
+                if (rs.next()) {
+                    // Tìm thấy tài khoản - đăng nhập hợp lệ
+                    System.out.println("Valid");
+                    JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Đóng cửa sổ đăng nhập
+                    setVisible(false);
+
+                    // TODO: Chuyển sang khung hình tiếp theo (Main Frame)
+                    System.out.println("Chuyển sang giao diện chính...");
+                } else {
+                    // Không tìm thấy tài khoản - đăng nhập không hợp lệ
+                    System.out.println("Invalid Username or Password");
+                    JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không hợp lệ!", "Lỗi đăng nhập",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi kết nối cơ sở dữ liệu: " + ex.getMessage(), "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == btnShowPassword) {
             // Nút hiển thị/ẩn mật khẩu
             if (btnShowPassword.isSelected()) {
