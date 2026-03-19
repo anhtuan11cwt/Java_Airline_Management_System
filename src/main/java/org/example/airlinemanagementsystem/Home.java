@@ -3,7 +3,9 @@ package org.example.airlinemanagementsystem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Home extends JFrame implements ActionListener {
 
@@ -38,7 +40,18 @@ public class Home extends JFrame implements ActionListener {
         // - Thanh menu
         // - Các chức năng quản lý hàng không
 
-        // TODO: Thêm hình ảnh nền cho trang chủ
+        // Tải hình ảnh nền từ thư mục icons
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/front.jpg"));
+
+        // Tạo JLabel để chứa hình ảnh nền
+        JLabel l1 = new JLabel(i1);
+
+        // Thiết lập vị trí và kích thước cho hình ảnh nền
+        l1.setBounds(0, 0, 1600, 800);
+
+        // Thêm hình ảnh nền vào khung hình
+        add(l1);
+
         // TODO: Thêm thanh menu (JMenuBar) với các mục: Quản lý chuyến bay, Quản lý
         // khách hàng, Báo cáo, Thoát
     }
