@@ -44,34 +44,25 @@ public class JourneyDetails extends JFrame implements ActionListener {
         // Thiết lập layout null để có thể sử dụng setBounds
         setLayout(null);
 
-        // Tạo nhãn "Nhập PNR:"
-        JLabel lblPnr = new JLabel("Nhập PNR:");
-        lblPnr.setBounds(50, 20, 100, 25);
-        lblPnr.setFont(new Font("Arial", Font.PLAIN, 14));
+        // Tạo nhãn "Mã PNR" với font kích thước 16
+        JLabel lblPnr = new JLabel("Mã PNR");
+        lblPnr.setBounds(50, 100, 120, 25);
+        lblPnr.setFont(new Font("Arial", Font.PLAIN, 16));
         add(lblPnr);
 
         // Tạo JTextField để nhập PNR (biến toàn cục)
         pnr = new JTextField();
-        pnr.setBounds(160, 20, 150, 25);
+        pnr.setBounds(190, 100, 150, 25);
         add(pnr);
 
-        // Tạo nút "Tìm kiếm"
-        JButton btnSearch = new JButton("Tìm kiếm");
-        btnSearch.setBounds(320, 20, 100, 25);
-        btnSearch.setBackground(new Color(0, 123, 255));
+        // Tạo nút "Hiển thị" với nền đen và chữ trắng
+        JButton btnSearch = new JButton("Hiển thị");
+        btnSearch.setBounds(350, 100, 120, 25);
+        btnSearch.setBackground(Color.BLACK);
         btnSearch.setForeground(Color.WHITE);
         btnSearch.setFocusPainted(false);
         btnSearch.addActionListener(this);
         add(btnSearch);
-
-        // Tạo nút "Thoát"
-        JButton btnExit = new JButton("Thoát");
-        btnExit.setBounds(430, 20, 80, 25);
-        btnExit.setBackground(new Color(220, 53, 69));
-        btnExit.setForeground(Color.WHITE);
-        btnExit.setFocusPainted(false);
-        btnExit.addActionListener(this);
-        add(btnExit);
 
         // Tạo JTable để hiển thị dữ liệu
         table = new JTable();
@@ -80,12 +71,12 @@ public class JourneyDetails extends JFrame implements ActionListener {
         model = new DefaultTableModel();
         table.setModel(model);
 
-        // Thiết lập vị trí và kích thước cho bảng
-        table.setBounds(0, 60, 800, 400);
+        // Thiết lập màu nền bảng
+        table.setBackground(Color.WHITE);
 
         // Tạo JScrollPane để thêm thanh cuộn khi dữ liệu quá lớn
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(0, 60, 800, 400);
+        scrollPane.setBounds(0, 150, 800, 320);
 
         // Thêm scrollPane (chứa bảng) vào frame
         add(scrollPane);
@@ -106,8 +97,8 @@ public class JourneyDetails extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Xử lý sự kiện khi nhấn nút "Tìm kiếm"
-        if (e.getActionCommand().equals("Tìm kiếm")) {
+        // Xử lý sự kiện khi nhấn nút "Hiển thị"
+        if (e.getActionCommand().equals("Hiển thị")) {
             // Lấy giá trị PNR từ text field
             String pnrText = pnr.getText().trim();
 
@@ -147,15 +138,9 @@ public class JourneyDetails extends JFrame implements ActionListener {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this,
                         "Lỗi truy vấn dữ liệu: " + ex.getMessage(),
-                        "Lỗi Database",
+                        "Lỗi Cơ sở dữ liệu",
                         JOptionPane.ERROR_MESSAGE);
             }
-        }
-        // Xử lý sự kiện khi nhấn nút "Thoát"
-        else if (e.getActionCommand().equals("Thoát")) {
-            // Đóng cửa sổ hiện tại
-            setVisible(false);
-            dispose();
         }
     }
 
