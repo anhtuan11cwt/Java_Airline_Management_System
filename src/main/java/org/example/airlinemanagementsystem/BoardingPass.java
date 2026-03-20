@@ -18,14 +18,14 @@ public class BoardingPass extends JFrame implements ActionListener {
 
     // Khai báo các biến toàn cục
     JTextField txtPNR;
-    JButton btnFetch;
-    JLabel lblNameValue, lblFlightCodeValue, lblSourceValue, lblDestinationValue;
-    JLabel lblDateValue, lblTicketIdValue;
+    JButton btnEnter;
+    JLabel lblNameValue, lblNationalityValue, lblFlightNameValue, lblFlightCodeValue;
+    JLabel lblSourceValue, lblDestinationValue, lblDateValue;
 
     public BoardingPass() {
         // Thiết lập khung hình (Frame)
         setTitle("Thẻ lên máy Bay - Boarding Pass");
-        setSize(1000, 450); // Kích thước giống như một chiếc vé máy bay thực tế
+        setSize(1000, 500); // Kích thước giống như một chiếc vé máy bay thực tế
 
         // Đặt frame tại vị trí (300, 150)
         setLocation(300, 150);
@@ -43,8 +43,8 @@ public class BoardingPass extends JFrame implements ActionListener {
         lblAirIndia.setBounds(380, 20, 300, 35);
         add(lblAirIndia);
 
-        // Tiêu đề phụ - BOARDING PASS
-        JLabel lblBoardingPass = new JLabel("BOARDING PASS");
+        // Tiêu đề phụ - THẺ LÊN MÁY BAY
+        JLabel lblBoardingPass = new JLabel("THẺ LÊN MÁY BAY");
         lblBoardingPass.setFont(new Font("Tahoma", Font.BOLD, 24));
         lblBoardingPass.setBounds(360, 60, 300, 30);
         add(lblBoardingPass);
@@ -64,14 +64,14 @@ public class BoardingPass extends JFrame implements ActionListener {
         txtPNR.setBounds(220, 120, 150, 25);
         add(txtPNR);
 
-        // Nút Tìm kiếm
-        btnFetch = new JButton("Tìm kiếm");
-        btnFetch.setBackground(Color.black);
-        btnFetch.setForeground(Color.white);
-        btnFetch.setFont(new Font("Tahoma", Font.BOLD, 14));
-        btnFetch.setBounds(380, 120, 125, 25);
-        btnFetch.addActionListener(this);
-        add(btnFetch);
+        // Nút Nhập
+        btnEnter = new JButton("Nhập");
+        btnEnter.setBackground(Color.black);
+        btnEnter.setForeground(Color.white);
+        btnEnter.setFont(new Font("Tahoma", Font.BOLD, 14));
+        btnEnter.setBounds(380, 120, 100, 25);
+        btnEnter.addActionListener(this);
+        add(btnEnter);
 
         // =====================================================
         // PHẦN THÔNG TIN HÀNH KHÁCH (Passenger Info Section)
@@ -85,8 +85,8 @@ public class BoardingPass extends JFrame implements ActionListener {
         add(lblPassengerInfo);
 
         // Họ tên
-        JLabel lblName = new JLabel("Họ tên:");
-        lblName.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        JLabel lblName = new JLabel("HỌ TÊN:");
+        lblName.setFont(new Font("Tahoma", Font.BOLD, 16));
         lblName.setBounds(60, 210, 150, 25);
         add(lblName);
 
@@ -96,17 +96,17 @@ public class BoardingPass extends JFrame implements ActionListener {
         lblNameValue.setForeground(Color.black);
         add(lblNameValue);
 
-        // Mã vé (Ticket ID)
-        JLabel lblTicketId = new JLabel("Mã vé:");
-        lblTicketId.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblTicketId.setBounds(60, 250, 150, 25);
-        add(lblTicketId);
+        // Quốc tịch
+        JLabel lblNationality = new JLabel("QUỐC TỊCH:");
+        lblNationality.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblNationality.setBounds(60, 250, 150, 25);
+        add(lblNationality);
 
-        lblTicketIdValue = new JLabel();
-        lblTicketIdValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblTicketIdValue.setBounds(220, 250, 200, 25);
-        lblTicketIdValue.setForeground(Color.black);
-        add(lblTicketIdValue);
+        lblNationalityValue = new JLabel();
+        lblNationalityValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblNationalityValue.setBounds(220, 250, 200, 25);
+        lblNationalityValue.setForeground(Color.black);
+        add(lblNationalityValue);
 
         // =====================================================
         // PHẦN THÔNG TIN CHUYẾN BAY (Flight Info Section)
@@ -119,51 +119,63 @@ public class BoardingPass extends JFrame implements ActionListener {
         lblFlightInfo.setBounds(550, 170, 250, 25);
         add(lblFlightInfo);
 
+        // Tên chuyến bay
+        JLabel lblFlightName = new JLabel("TÊN CHUYẾN BAY:");
+        lblFlightName.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblFlightName.setBounds(550, 210, 150, 25);
+        add(lblFlightName);
+
+        lblFlightNameValue = new JLabel();
+        lblFlightNameValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        lblFlightNameValue.setBounds(700, 210, 200, 25);
+        lblFlightNameValue.setForeground(Color.black);
+        add(lblFlightNameValue);
+
         // Mã chuyến bay
-        JLabel lblFlightCode = new JLabel("Mã chuyến bay:");
-        lblFlightCode.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblFlightCode.setBounds(550, 210, 150, 25);
+        JLabel lblFlightCode = new JLabel("MÃ CHUYẾN BAY:");
+        lblFlightCode.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblFlightCode.setBounds(550, 250, 150, 25);
         add(lblFlightCode);
 
         lblFlightCodeValue = new JLabel();
         lblFlightCodeValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblFlightCodeValue.setBounds(720, 210, 200, 25);
+        lblFlightCodeValue.setBounds(700, 250, 200, 25);
         lblFlightCodeValue.setForeground(Color.black);
         add(lblFlightCodeValue);
 
         // Điểm đi
-        JLabel lblSource = new JLabel("Điểm đi:");
-        lblSource.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblSource.setBounds(550, 250, 150, 25);
+        JLabel lblSource = new JLabel("ĐIỂM ĐI:");
+        lblSource.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblSource.setBounds(60, 300, 150, 25);
         add(lblSource);
 
         lblSourceValue = new JLabel();
         lblSourceValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblSourceValue.setBounds(720, 250, 200, 25);
+        lblSourceValue.setBounds(220, 300, 150, 25);
         lblSourceValue.setForeground(Color.black);
         add(lblSourceValue);
 
         // Điểm đến
-        JLabel lblDestination = new JLabel("Điểm đến:");
-        lblDestination.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDestination.setBounds(550, 290, 150, 25);
+        JLabel lblDestination = new JLabel("ĐIỂM ĐẾN:");
+        lblDestination.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDestination.setBounds(380, 300, 150, 25);
         add(lblDestination);
 
         lblDestinationValue = new JLabel();
         lblDestinationValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDestinationValue.setBounds(720, 290, 200, 25);
+        lblDestinationValue.setBounds(540, 300, 150, 25);
         lblDestinationValue.setForeground(Color.black);
         add(lblDestinationValue);
 
         // Ngày khởi hành
-        JLabel lblDate = new JLabel("Ngày khởi hành:");
-        lblDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDate.setBounds(550, 330, 150, 25);
+        JLabel lblDate = new JLabel("NGÀY KHỞI HÀNH:");
+        lblDate.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblDate.setBounds(550, 350, 180, 25);
         add(lblDate);
 
         lblDateValue = new JLabel();
         lblDateValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDateValue.setBounds(720, 330, 200, 25);
+        lblDateValue.setBounds(740, 350, 200, 25);
         lblDateValue.setForeground(Color.black);
         add(lblDateValue);
 
@@ -171,13 +183,13 @@ public class BoardingPass extends JFrame implements ActionListener {
         // HÌNH ẢNH MINH HỌA (Image)
         // =====================================================
 
-        // Hình ảnh minh họa
+        // Hình ảnh logo Air India - Đặt ở phía bên phải (x=550), kích thước 300x300
         ImageIcon imgIcon = new ImageIcon("src/main/resources/icons/airindia.png");
         Image img = imgIcon.getImage();
-        Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+        Image scaledImg = img.getScaledInstance(300, 300, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
         JLabel lblImage = new JLabel(scaledIcon);
-        lblImage.setBounds(60, 300, 200, 100);
+        lblImage.setBounds(550, 50, 300, 300);
         add(lblImage);
 
         // Hiển thị cửa sổ
@@ -188,7 +200,7 @@ public class BoardingPass extends JFrame implements ActionListener {
     // Triển khai phương thức actionPerformed để xử lý sự kiện
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == btnFetch) {
+        if (ae.getSource() == btnEnter) {
             // Lấy mã PNR từ trường nhập liệu
             String pnr = txtPNR.getText();
 
@@ -208,9 +220,10 @@ public class BoardingPass extends JFrame implements ActionListener {
                 if (rs.next()) {
                     // Hiển thị thông tin hành khách
                     lblNameValue.setText(rs.getString("Name"));
-                    lblTicketIdValue.setText(rs.getString("Ticket"));
+                    lblNationalityValue.setText(rs.getString("Nationality"));
 
                     // Hiển thị thông tin chuyến bay
+                    lblFlightNameValue.setText(rs.getString("Flight_Name"));
                     lblFlightCodeValue.setText(rs.getString("Flight_Code"));
                     lblSourceValue.setText(rs.getString("Source"));
                     lblDestinationValue.setText(rs.getString("Destination"));
@@ -219,7 +232,8 @@ public class BoardingPass extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin với mã PNR này");
                     // Xóa các nhãn nếu không tìm thấy
                     lblNameValue.setText("");
-                    lblTicketIdValue.setText("");
+                    lblNationalityValue.setText("");
+                    lblFlightNameValue.setText("");
                     lblFlightCodeValue.setText("");
                     lblSourceValue.setText("");
                     lblDestinationValue.setText("");
