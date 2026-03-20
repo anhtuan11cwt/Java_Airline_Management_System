@@ -66,3 +66,12 @@ INSERT INTO reservation VALUES
 ('PNR001', 'TICK001', 'VN001', 'Nguyen Van A', 'Vietnam', 'Air India 1212', 'VN101', 'Hà Nội', 'TP. Hồ Chí Minh', '2026-03-20'),
 ('PNR002', 'TICK002', 'VN002', 'Tran Thi B', 'Vietnam', 'IndiGo 2201', 'VN102', 'TP. Hồ Chí Minh', 'Đà Nẵng', '2026-03-21');
 
+-- Bảng lưu trữ thông tin hủy vé
+CREATE TABLE IF NOT EXISTS cancel (
+    pnr VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(50),
+    cancel_no VARCHAR(20),
+    f_code VARCHAR(20),
+    ddate DATE
+);
+

@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Random;
 
@@ -175,9 +176,11 @@ public class Cancel extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == btnFetch) {
-            // Lấy mã PNR từ trường nhập liệu TFPNR
+            // XỬ LÝ CHỨC NĂNG "HIỂN THỊ CHI TIẾT" (SHOW DETAILS)
+            // Bước 1: Thu thập dữ liệu đầu vào - Lấy mã PNR từ trường nhập liệu TFPNR
             String pnr = TFPNR.getText();
 
+            // Kiểm tra mã PNR có trống hay không
             if (pnr.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập mã PNR/Ticket");
                 return;
@@ -187,17 +190,37 @@ public class Cancel extends JFrame implements ActionListener {
                 // Khởi tạo đối tượng kết nối database
                 Conn conn = new Conn();
 
-                // Truy vấn thông tin đặt vé dựa trên mã PNR
-                String query = "SELECT * FROM reservation WHERE PNR = '" + pnr + "' OR Ticket = '" + pnr + "'";
-                ResultSet rs = conn.s.executeQuery(query);
+                // Bước 2: Truy vấn cơ sở dữ liệu (SQL Query)
+                // Sử dụng PreparedStatement để tránh SQL Injection
+                String query = "SELECT * FROM reservation WHERE PNR = ? OR Ticket = ?";
+                PreparedStatement pstmt = conn.c.prepareStatement(query);
+                pstmt.setString(1, pnr);
+                pstmt.setString(2, pnr);
 
+                // Thực hiện truy vấn và lấy kết quả
+                ResultSet rs = pstmt.executeQuery();
+
+                // Bước 3: Kiểm tra và Xử lý kết quả
                 if (rs.next()) {
-                    // Hiển thị thông tin đặt vé lên các JLabel
+                    // Bước 4: Tự động điền thông tin lên giao diện
+                    // Hiển thị Tên hành khách (Name)
                     lblNameValue.setText(rs.getString("Name"));
+
+                    // Hiển thị Tên chuyến bay (Flight Name)
                     lblFlightNameValue.setText(rs.getString("Flight_Name"));
+
+                    // Hiển thị Mã chuyến bay (Flight Code)
                     lblFlightCodeValue.setText(rs.getString("Flight_Code"));
-                    lblDateValue.setText(rs.getString("D_Date"));
+
+                    // Hiển thị Ngày khởi hành (Date of Travel) - xử lý định dạng ngày
+                    java.sql.Date date = rs.getDate("D_Date");
+                    if (date != null) {
+                        lblDateValue.setText(date.toString());
+                    } else {
+                        lblDateValue.setText("");
+                    }
                 } else {
+                    // Trường hợp không thấy dữ liệu
                     JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin đặt vé với mã này");
                     // Xóa các nhãn nếu không tìm thấy
                     lblNameValue.setText("");
@@ -205,6 +228,9 @@ public class Cancel extends JFrame implements ActionListener {
                     lblFlightCodeValue.setText("");
                     lblDateValue.setText("");
                 }
+
+                // Đóng PreparedStatement sau khi sử dụng
+                pstmt.close();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -237,22 +263,45 @@ public class Cancel extends JFrame implements ActionListener {
                 try {
                     Conn conn = new Conn();
 
-                    // Xóa thông tin đặt vé khỏi cơ sở dữ liệu
-                    String deleteQuery = "DELETE FROM reservation WHERE PNR = '" + pnr + "' OR Ticket = '" + pnr + "'";
-                    conn.s.executeUpdate(deleteQuery);
+                    // Lấy thông tin từ các trường trên giao diện
+                    String name = lblNameValue.getText();
+                    String flightCode = lblFlightCodeValue.getText();
+                    String dateStr = lblDateValue.getText();
+                    String cancelNo = String.valueOf(cancellationNumber);
+
+                    // Bước 1: Lưu bản ghi hủy vào bảng cancel
+                    // INSERT INTO cancel VALUES (...)
+                    String insertQuery = "INSERT INTO cancel (pnr, name, cancel_no, f_code, ddate) VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement pstmtInsert = conn.c.prepareStatement(insertQuery);
+                    pstmtInsert.setString(1, pnr);
+                    pstmtInsert.setString(2, name);
+                    pstmtInsert.setString(3, cancelNo);
+                    pstmtInsert.setString(4, flightCode);
+                    // Chuyển đổi chuỗi ngày thành java.sql.Date
+                    if (dateStr != null && !dateStr.isEmpty()) {
+                        java.sql.Date sqlDate = java.sql.Date.valueOf(dateStr);
+                        pstmtInsert.setDate(5, sqlDate);
+                    } else {
+                        pstmtInsert.setDate(5, null);
+                    }
+                    pstmtInsert.executeUpdate();
+                    pstmtInsert.close();
+
+                    // Bước 2: Xóa bản ghi đặt vé khỏi bảng reservation
+                    // DELETE FROM reservation WHERE pnr = ...
+                    String deleteQuery = "DELETE FROM reservation WHERE PNR = ? OR Ticket = ?";
+                    PreparedStatement pstmtDelete = conn.c.prepareStatement(deleteQuery);
+                    pstmtDelete.setString(1, pnr);
+                    pstmtDelete.setString(2, pnr);
+                    pstmtDelete.executeUpdate();
+                    pstmtDelete.close();
 
                     // Tạo số hủy vé mới cho giao dịch tiếp theo
                     cancellationNumber = random.nextInt(900000) + 100000;
                     lblCancellationNumber.setText("" + cancellationNumber);
 
-                    // Hiển thị thông báo thành công với số hủy vé
-                    JOptionPane.showMessageDialog(null,
-                            "Hủy vé thành công!\n\n" +
-                                    "Mã PNR: " + pnr + "\n" +
-                                    "Số hủy vé: " + cancellationNumber + "\n" +
-                                    "Họ tên: " + lblNameValue.getText() + "\n\n" +
-                                    "Vui lòng lưu lại số hủy vé để đối chiếu.",
-                            "Hủy vé thành công",
+                    // Hiển thị thông báo thành công
+                    JOptionPane.showMessageDialog(null, "Ticket Cancelled", "Hủy vé thành công",
                             JOptionPane.INFORMATION_MESSAGE);
 
                     // Xóa các trường thông tin
