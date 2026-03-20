@@ -121,17 +121,21 @@ public class JourneyDetails extends JFrame implements ActionListener {
                 String query = "SELECT * FROM reservation WHERE pnr = '" + pnrText + "'";
                 ResultSet rs = s.executeQuery(query);
 
-                // Chuyển đổi ResultSet sang TableModel
+                // Kiểm tra tính hợp lệ của PNR - sử dụng isBeforeFirst() để kiểm tra xem có dữ
+                // liệu trả về không
+                // isBeforeFirst() trả về true nếu có ít nhất một hàng dữ liệu
+                if (!rs.isBeforeFirst()) {
+                    // Không tìm thấy thông tin với PNR đã nhập
+                    JOptionPane.showMessageDialog(this,
+                            "PNR không hợp lệ - Không tìm thấy thông tin hành trình!",
+                            "Lỗi PNR",
+                            JOptionPane.ERROR_MESSAGE);
+                    return; // Dừng thực thi, không hiển thị bảng trống
+                }
+
+                // Nếu PNR hợp lệ, chuyển đổi ResultSet sang TableModel và hiển thị dữ liệu
                 model = resultSetToTableModel(rs);
                 table.setModel(model);
-
-                // Kiểm tra nếu không có dữ liệu
-                if (!rs.isBeforeFirst() && !rs.isAfterLast()) {
-                    JOptionPane.showMessageDialog(this,
-                            "Không tìm thấy dữ liệu với PNR: " + pnrText,
-                            "Thông báo",
-                            JOptionPane.INFORMATION_MESSAGE);
-                }
 
             } catch (Exception ex) {
                 // Xử lý ngoại lệ khi truy vấn thất bại
