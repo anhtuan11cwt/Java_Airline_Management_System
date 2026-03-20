@@ -172,18 +172,12 @@ public class Home extends JFrame implements ActionListener {
                     JOptionPane.INFORMATION_MESSAGE);
 
         } else if (actionCommand.equals("Đặt chuyến bay")) {
-            // Chức năng đang được phát triển
-            JOptionPane.showMessageDialog(this,
-                    "Chức năng Đặt chuyến bay đang được phát triển!",
-                    "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
+            // Mở khung đặt vé (BookFlight)
+            new BookFlight();
 
         } else if (actionCommand.equals("Chi tiết hành trình")) {
-            // Chức năng đang được phát triển
-            JOptionPane.showMessageDialog(this,
-                    "Chức năng Chi tiết hành trình đang được phát triển!",
-                    "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
+            // Mở khung chi tiết hành trình (JourneyDetails)
+            new JourneyDetails();
 
         } else if (actionCommand.equals("Hủy vé")) {
             // Chức năng đang được phát triển
