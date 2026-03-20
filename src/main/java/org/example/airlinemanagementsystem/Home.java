@@ -180,11 +180,8 @@ public class Home extends JFrame implements ActionListener {
             new JourneyDetails();
 
         } else if (actionCommand.equals("Hủy vé")) {
-            // Chức năng đang được phát triển
-            JOptionPane.showMessageDialog(this,
-                    "Chức năng Hủy vé đang được phát triển!",
-                    "Thông báo",
-                    JOptionPane.INFORMATION_MESSAGE);
+            // Mở cửa sổ hủy vé máy bay
+            new Cancel();
 
         } else if (actionCommand.equals("Thẻ lên máy bay")) {
             // Chức năng đang được phát triển

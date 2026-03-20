@@ -84,6 +84,7 @@ public class Cancel extends JFrame implements ActionListener {
         lblNameValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblNameValue.setBounds(220, 180, 200, 25);
         lblNameValue.setForeground(Color.black);
+        lblNameValue.setText(""); // Khởi tạo giá trị rỗng
         add(lblNameValue);
 
         // Tên chuyến bay (Flight Name)
@@ -96,6 +97,7 @@ public class Cancel extends JFrame implements ActionListener {
         lblFlightNameValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblFlightNameValue.setBounds(220, 220, 300, 25);
         lblFlightNameValue.setForeground(Color.black);
+        lblFlightNameValue.setText(""); // Khởi tạo giá trị rỗng
         add(lblFlightNameValue);
 
         // Mã chuyến bay (Flight Code)
@@ -108,6 +110,7 @@ public class Cancel extends JFrame implements ActionListener {
         lblFlightCodeValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblFlightCodeValue.setBounds(220, 250, 200, 25);
         lblFlightCodeValue.setForeground(Color.black);
+        lblFlightCodeValue.setText(""); // Khởi tạo giá trị rỗng
         add(lblFlightCodeValue);
 
         // Ngày khởi hành (Date of Travel)
@@ -120,6 +123,7 @@ public class Cancel extends JFrame implements ActionListener {
         lblDateValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblDateValue.setBounds(220, 280, 200, 25);
         lblDateValue.setForeground(Color.black);
+        lblDateValue.setText(""); // Khởi tạo giá trị rỗng
         add(lblDateValue);
 
         // =====================================================
