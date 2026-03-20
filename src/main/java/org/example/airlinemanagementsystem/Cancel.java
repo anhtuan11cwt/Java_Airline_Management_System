@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,10 +18,12 @@ import javax.swing.JTextField;
 public class Cancel extends JFrame implements ActionListener {
 
     // Khai báo các biến toàn cục (global variables)
-    JTextField txtPNR;
+    JTextField TFPNR;
     JButton btnFetch;
-    JLabel lblNameValue, lblFlightNameValue, lblFlightCodeValue, lblSourceValue, lblDestinationValue, lblDateValue;
+    JLabel lblNameValue, lblFlightNameValue, lblFlightCodeValue, lblDateValue, lblCancellationNumber;
     JButton btnCancel;
+    Random random;
+    int cancellationNumber;
 
     public Cancel() {
         // Thiết lập khung hình (Frame)
@@ -51,15 +54,15 @@ public class Cancel extends JFrame implements ActionListener {
         lblReservationInfo.setBounds(60, 80, 250, 25);
         add(lblReservationInfo);
 
-        // Số PNR (Ticket ID) - Đây là trường nhập liệu để tìm kiếm
-        JLabel lblPNR = new JLabel("Mã PNR/Ticket:");
+        // Số PNR (Ticket ID) - Đây là trường nhập liệu để tìm kiếm vé cần hủy
+        JLabel lblPNR = new JLabel("Mã PNR:");
         lblPNR.setFont(new Font("Tahoma", Font.PLAIN, 16));
         lblPNR.setBounds(60, 130, 150, 25);
         add(lblPNR);
 
-        txtPNR = new JTextField();
-        txtPNR.setBounds(220, 130, 150, 25);
-        add(txtPNR);
+        TFPNR = new JTextField();
+        TFPNR.setBounds(220, 130, 150, 25);
+        add(TFPNR);
 
         // Nút Fetch để truy vấn thông tin đặt vé
         btnFetch = new JButton("Tìm kiếm");
@@ -106,41 +109,36 @@ public class Cancel extends JFrame implements ActionListener {
         lblFlightCodeValue.setForeground(Color.black);
         add(lblFlightCodeValue);
 
-        // Điểm đi (Source)
-        JLabel lblSource = new JLabel("Điểm đi:");
-        lblSource.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblSource.setBounds(60, 280, 150, 25);
-        add(lblSource);
-
-        lblSourceValue = new JLabel();
-        lblSourceValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblSourceValue.setBounds(220, 280, 200, 25);
-        lblSourceValue.setForeground(Color.black);
-        add(lblSourceValue);
-
-        // Điểm đến (Destination)
-        JLabel lblDestination = new JLabel("Điểm đến:");
-        lblDestination.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDestination.setBounds(60, 310, 150, 25);
-        add(lblDestination);
-
-        lblDestinationValue = new JLabel();
-        lblDestinationValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDestinationValue.setBounds(220, 310, 200, 25);
-        lblDestinationValue.setForeground(Color.black);
-        add(lblDestinationValue);
-
-        // Ngày khởi hành (Date)
+        // Ngày khởi hành (Date of Travel)
         JLabel lblDate = new JLabel("Ngày khởi hành:");
         lblDate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDate.setBounds(60, 340, 150, 25);
+        lblDate.setBounds(60, 280, 150, 25);
         add(lblDate);
 
         lblDateValue = new JLabel();
         lblDateValue.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblDateValue.setBounds(220, 340, 200, 25);
+        lblDateValue.setBounds(220, 280, 200, 25);
         lblDateValue.setForeground(Color.black);
         add(lblDateValue);
+
+        // =====================================================
+        // SỐ HỦY VÉ (Cancellation Number) - Tạo số ngẫu nhiên 6 chữ số
+        // =====================================================
+
+        // Khởi tạo Random và tạo số hủy vé 6 chữ số
+        random = new Random();
+        cancellationNumber = random.nextInt(900000) + 100000; // Tạo số từ 100000 đến 999999
+
+        JLabel lblCancellation = new JLabel("Số hủy vé:");
+        lblCancellation.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblCancellation.setBounds(60, 320, 150, 25);
+        add(lblCancellation);
+
+        lblCancellationNumber = new JLabel("" + cancellationNumber);
+        lblCancellationNumber.setFont(new Font("Tahoma", Font.BOLD, 16));
+        lblCancellationNumber.setBounds(220, 320, 200, 25);
+        lblCancellationNumber.setForeground(Color.red);
+        add(lblCancellationNumber);
 
         // =====================================================
         // NÚT HỦY VÉ (Cancel Button)
@@ -164,8 +162,8 @@ public class Cancel extends JFrame implements ActionListener {
         Image scaledImg = img.getScaledInstance(250, 250, Image.SCALE_DEFAULT);
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
         JLabel lblImage = new JLabel(scaledIcon);
-        // Đặt hình ảnh tại vị trí (470, 100) theo yêu cầu
-        lblImage.setBounds(470, 100, 250, 250);
+        // Đặt hình ảnh tại vị trí (470, 120) theo yêu cầu
+        lblImage.setBounds(470, 120, 250, 250);
         add(lblImage);
 
         // Hiển thị cửa sổ
@@ -177,8 +175,8 @@ public class Cancel extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == btnFetch) {
-            // Lấy mã PNR từ trường nhập liệu
-            String pnr = txtPNR.getText();
+            // Lấy mã PNR từ trường nhập liệu TFPNR
+            String pnr = TFPNR.getText();
 
             if (pnr.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập mã PNR/Ticket");
@@ -198,8 +196,6 @@ public class Cancel extends JFrame implements ActionListener {
                     lblNameValue.setText(rs.getString("Name"));
                     lblFlightNameValue.setText(rs.getString("Flight_Name"));
                     lblFlightCodeValue.setText(rs.getString("Flight_Code"));
-                    lblSourceValue.setText(rs.getString("Source"));
-                    lblDestinationValue.setText(rs.getString("Destination"));
                     lblDateValue.setText(rs.getString("D_Date"));
                 } else {
                     JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin đặt vé với mã này");
@@ -207,8 +203,6 @@ public class Cancel extends JFrame implements ActionListener {
                     lblNameValue.setText("");
                     lblFlightNameValue.setText("");
                     lblFlightCodeValue.setText("");
-                    lblSourceValue.setText("");
-                    lblDestinationValue.setText("");
                     lblDateValue.setText("");
                 }
 
@@ -220,9 +214,9 @@ public class Cancel extends JFrame implements ActionListener {
             // Xử lý hủy vé máy bay
 
             // Kiểm tra mã PNR
-            String pnr = txtPNR.getText();
+            String pnr = TFPNR.getText();
             if (pnr.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Vui lòng nhập mã PNR/Ticket và tìm kiếm thông tin");
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập mã PNR và tìm kiếm thông tin");
                 return;
             }
 
@@ -247,21 +241,25 @@ public class Cancel extends JFrame implements ActionListener {
                     String deleteQuery = "DELETE FROM reservation WHERE PNR = '" + pnr + "' OR Ticket = '" + pnr + "'";
                     conn.s.executeUpdate(deleteQuery);
 
-                    // Hiển thị thông báo thành công
+                    // Tạo số hủy vé mới cho giao dịch tiếp theo
+                    cancellationNumber = random.nextInt(900000) + 100000;
+                    lblCancellationNumber.setText("" + cancellationNumber);
+
+                    // Hiển thị thông báo thành công với số hủy vé
                     JOptionPane.showMessageDialog(null,
                             "Hủy vé thành công!\n\n" +
                                     "Mã PNR: " + pnr + "\n" +
-                                    "Họ tên: " + lblNameValue.getText(),
+                                    "Số hủy vé: " + cancellationNumber + "\n" +
+                                    "Họ tên: " + lblNameValue.getText() + "\n\n" +
+                                    "Vui lòng lưu lại số hủy vé để đối chiếu.",
                             "Hủy vé thành công",
                             JOptionPane.INFORMATION_MESSAGE);
 
                     // Xóa các trường thông tin
-                    txtPNR.setText("");
+                    TFPNR.setText("");
                     lblNameValue.setText("");
                     lblFlightNameValue.setText("");
                     lblFlightCodeValue.setText("");
-                    lblSourceValue.setText("");
-                    lblDestinationValue.setText("");
                     lblDateValue.setText("");
 
                 } catch (Exception e) {
