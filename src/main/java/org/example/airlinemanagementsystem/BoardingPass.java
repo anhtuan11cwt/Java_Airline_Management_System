@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.ImageIcon;
@@ -213,9 +214,12 @@ public class BoardingPass extends JFrame implements ActionListener {
                 // Khởi tạo đối tượng kết nối database
                 Conn conn = new Conn();
 
-                // Truy vấn thông tin đặt vé dựa trên mã PNR
-                String query = "SELECT * FROM reservation WHERE PNR = '" + pnr + "'";
-                ResultSet rs = conn.s.executeQuery(query);
+                // Truy vấn thông tin đặt vé dựa trên mã PNR (sử dụng PreparedStatement để tránh
+                // SQL Injection)
+                String query = "SELECT * FROM reservation WHERE PNR = ?";
+                PreparedStatement pstmt = conn.c.prepareStatement(query);
+                pstmt.setString(1, pnr);
+                ResultSet rs = pstmt.executeQuery();
 
                 if (rs.next()) {
                     // Hiển thị thông tin hành khách
@@ -229,7 +233,8 @@ public class BoardingPass extends JFrame implements ActionListener {
                     lblDestinationValue.setText(rs.getString("Destination"));
                     lblDateValue.setText(rs.getString("D_Date"));
                 } else {
-                    JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin với mã PNR này");
+                    JOptionPane.showMessageDialog(null,
+                            "Không tìm thấy thông tin với mã PNR này.\nVui lòng kiểm tra lại mã PNR hoặc xác nhận vé chưa bị hủy.");
                     // Xóa các nhãn nếu không tìm thấy
                     lblNameValue.setText("");
                     lblNationalityValue.setText("");
@@ -239,6 +244,10 @@ public class BoardingPass extends JFrame implements ActionListener {
                     lblDestinationValue.setText("");
                     lblDateValue.setText("");
                 }
+
+                // Đóng PreparedStatement sau khi sử dụng
+                pstmt.close();
+                rs.close();
 
             } catch (Exception e) {
                 e.printStackTrace();
